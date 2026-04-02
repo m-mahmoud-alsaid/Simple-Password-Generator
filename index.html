@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator Application</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Changa+One&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap">
+</head>
+
+<body>
+    <h1 id="page-title" class="page-title">Password Generator</h1>
+    <div id="password-section" class="password-section">
+        <div id="container" class="container">
+            <div id="password-details" class="password-details">
+                <div id="password-length" class="password-length">
+                    <p id="password-length-title">password length</p>
+                    <input id="password-length-input" type="checkbox">
+                </div>
+                <div id="numbers" class="numbers">
+                    <p id="numbers-title">numbers</p>
+                    <input id="numbers-input" type="checkbox">
+                </div>
+                <div id="special-characters" class="special-characters">
+                    <p id="special-characters-title">special characters</p>
+                    <input id="special-characters-input" type="checkbox">
+                </div>
+            </div>
+            <button id="generate-password" class="generate-password">generate password</button>
+            <p id="display-password" class="display-password">password will appear here</p>
+            <p id="latest-passwords" class="latest-passwords">latest 10 passwords</p>
+            <div id="passwords" class="passwords"></div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>
