@@ -1,0 +1,203 @@
+/* Start Global Variables */
+:root {
+    --main-light: #BAB0D4;
+    --main-dark: #4C1A57;
+    --hover: #8E7CC3;
+    --bg: #F5F3FA;
+    --white: #FFFFFF;
+    --text-dark: #2D1B34;
+    --border: #D6CFE8;
+}
+
+/* End Global Variables */
+/* Start Customize Responsive  */
+@media (min-width: 768px) {
+    .container {
+        width: 750px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        width: 970px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 1170px;
+    }
+}
+
+/* End Customize Responsive  */
+/* Start Rules  */
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    text-transform: capitalize;
+    background-color: var(--bg);
+}
+
+/* End Rules  */
+/* Start Page Title */
+.page-title {
+    color: var(--main-dark);
+    margin: 35px auto;
+    width: fit-content;
+}
+
+/* End Page Title */
+/* Start Password Section */
+.password-section {
+    display: flex;
+    justify-content: center;
+}
+
+.password-section .container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.password-details,
+.generate-password,
+.display-password,
+.latest-passwords,
+.passwords {
+    background-color: var(--white);
+    border-radius: 10px;
+}
+
+.password-details {
+    display: flex;
+}
+
+.password-details div:not(:last-of-type) {
+    border-right: 2px solid var(--border);
+}
+
+.password-details .password-length,
+.password-details .numbers,
+.password-details .special-characters {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 10px;
+    flex-basis: calc(100% / 3);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.password-details .password-length::before,
+.password-details .numbers::before,
+.password-details .special-characters::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    background-color: var(--hover);
+    z-index: -1;
+    transition: 0.3s;
+}
+
+.password-details .password-length:hover::before,
+.password-details .numbers:hover::before,
+.password-details .special-characters:hover::before {
+    width: 100%;
+    height: 100%;
+}
+
+.password-details .password-length #password-length-title,
+.password-details .numbers #numbers-title,
+.password-details .special-characters #special-characters-title {
+    color: var(--text-dark);
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.3s;
+}
+
+.password-details .password-length:hover #password-length-title,
+.password-details .numbers:hover #numbers-title,
+.password-details .special-characters:hover #special-characters-title {
+    color: white;
+}
+
+.password-details .password-length #password-length-input,
+.password-details .numbers #numbers-input,
+.password-details .special-characters #special-characters-input {
+    border-width: 0;
+    background-color: var(--main-light);
+    border-radius: 5px;
+    width: 100%;
+    height: 30px;
+}
+
+@media (max-width: 767px) {
+    .password-details {
+        flex-direction: column;
+    }
+
+    .password-details div {
+        border-right: none !important;
+        border-bottom: 2px solid var(--border);
+    }
+}
+
+.generate-password {
+    padding: 20px;
+    text-transform: capitalize;
+    font-weight: bold;
+    font-size: 20px;
+    color: var(--bg);
+    background-color: var(--main-dark);
+    transition: 0.3s;
+}
+
+.generate-password:hover {
+    transform: translateY(-10px);
+}
+
+.display-password,
+.latest-passwords {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-dark);
+    font-size: 22px;
+    font-weight: bold;
+    border: 5px dotted var(--border);
+}
+
+.latest-passwords {
+    border: none;
+}
+
+.passwords {
+    padding: 15px 0 15px 15px;
+}
+
+.passwords p,
+.passwords p span {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.passwords p:not(:last-of-type) {
+    border-bottom: 2px solid var(--border);
+}
+
+.passwords p span {
+    margin-right: 15px;
+}
+
+/* End Password Section */
