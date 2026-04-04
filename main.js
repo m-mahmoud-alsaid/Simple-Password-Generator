@@ -5,7 +5,7 @@ let charactersInput = document.getElementById('special-characters-input');
 let errorMessage = document.getElementById('error-message');
 
 function checkPasswordLength() {
-    return passwordLengthInput.value !== '' && passwordLengthInput.value >= 1 && passwordLengthInput.value <= 32 ? true : false;
+    return passwordLengthInput.value !== '' && passwordLengthInput.value >= 8 && passwordLengthInput.value <= 32 ? true : false;
 }
 
 function generate(password, passwordWithNumbers, passwordWithChars, passwordLength) {
@@ -76,19 +76,21 @@ function storePasswordInLocalStorage(pass) {
 
 function displayLatestPasswords() {
     let passwordsBox = document.getElementById('passwords');
-    let p = JSON.parse(localStorage.getItem('passwords'));
+    let p = JSON.parse(localStorage.getItem('passwords')) || null;
     passwordsBox.innerHTML = '';
 
-    for (let i = 0; i < p.length; i++) {
-        if (i >= p.length - 10) {
-            let passwordNumber = document.createElement('span');
-            let passwordNumberContent = document.createTextNode(p[i][0]);
-            passwordNumber.appendChild(passwordNumberContent);
-            let password = document.createElement('p');
-            let passwordContent = document.createTextNode(p[i][1]);
-            password.appendChild(passwordNumber);
-            password.appendChild(passwordContent);
-            passwordsBox.appendChild(password);
+    if (p !== null) {
+        for (let i = 0; i < p.length; i++) {
+            if (i >= p.length - 10) {
+                let passwordNumber = document.createElement('span');
+                let passwordNumberContent = document.createTextNode(p[i][0]);
+                passwordNumber.appendChild(passwordNumberContent);
+                let password = document.createElement('p');
+                let passwordContent = document.createTextNode(p[i][1]);
+                password.appendChild(passwordNumber);
+                password.appendChild(passwordContent);
+                passwordsBox.appendChild(password);
+            }
         }
     }
 }
