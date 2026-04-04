@@ -65,9 +65,38 @@ function createErrorMessage() {
     }
 }
 
+function storePasswordInLocalStorage(pass) {
+    let counter = localStorage.getItem('counter') || null;
+    let passwords = JSON.parse(localStorage.getItem('passwords')) || [];
+    if (counter === null) counter = 0;
+    if (!passwords[+counter]) passwords[+counter] = [+counter + 1, pass];
+    localStorage.setItem('counter', ++counter);
+    localStorage.setItem('passwords', JSON.stringify(passwords));
+}
+
+function displayLatestPasswords() {
+    let passwordsBox = document.getElementById('passwords');
+    let p = JSON.parse(localStorage.getItem('passwords'));
+    passwordsBox.innerHTML = '';
+
+    for (let i = 0; i < p.length; i++) {
+        if (i >= p.length - 10) {
+            let passwordNumber = document.createElement('span');
+            let passwordNumberContent = document.createTextNode(p[i][0]);
+            passwordNumber.appendChild(passwordNumberContent);
+            let password = document.createElement('p');
+            let passwordContent = document.createTextNode(p[i][1]);
+            password.appendChild(passwordNumber);
+            password.appendChild(passwordContent);
+            passwordsBox.appendChild(password);
+        }
+    }
+}
+
 function displayPassword(password) {
     let display = document.getElementById('display-password');
     display.innerHTML = password;
+    storePasswordInLocalStorage(password);
 }
 
 function generatePassword(passwordLength) {
@@ -78,17 +107,21 @@ function generatePassword(passwordLength) {
     if (checkPasswordLength() && numbersInput.checked && charactersInput.checked) {
         password = true;
         displayPassword(generate(password, passwordWithNumbers, passwordWithChars, passwordLength));
+        displayLatestPasswords();
     } else if (checkPasswordLength() && numbersInput.checked && charactersInput.checked === false) {
         passwordWithNumbers = true;
         displayPassword(generate(password, passwordWithNumbers, passwordWithChars, passwordLength));
+        displayLatestPasswords();
     } else if (checkPasswordLength() && numbersInput.checked === false && charactersInput.checked) {
         passwordWithChars = true;
         displayPassword(generate(password, passwordWithNumbers, passwordWithChars, passwordLength));
+        displayLatestPasswords();
     } else {
         createErrorMessage();
     }
 }
 
+window.onload = displayLatestPasswords();
 generatePasswordButton.onclick = () => {
     generatePassword(passwordLengthInput.value);
 }
