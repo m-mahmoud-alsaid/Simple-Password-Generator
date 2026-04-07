@@ -167,6 +167,13 @@ body {
     transform: translateY(-10px);
 }
 
+.display-password {
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
 .display-password,
 .latest-passwords {
     padding: 20px;
@@ -183,6 +190,17 @@ body {
 
 .passwords {
     padding: 15px 0 15px 15px;
+}
+
+.passwords p {
+    white-space: wrap;
+}
+
+.passwords p {
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .passwords p,
