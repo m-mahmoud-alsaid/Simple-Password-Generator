@@ -1,129 +1,73 @@
-let generatePasswordButton = document.getElementById('generate-password');
-let passwordLengthInput = document.getElementById('password-length-input');
-let numbersInput = document.getElementById('numbers-input');
-let charactersInput = document.getElementById('special-characters-input');
-let errorMessage = document.getElementById('error-message');
+let passwordInput = document.getElementById('password-length-input');
+let generateButton = document.getElementById('generate-password');
+let includeNumbersCheckBox = document.getElementById('numbers-input');
+let includeSpecialCharsCheckBox = document.getElementById('special-characters-input');
 
-function checkPasswordLength() {
-    return passwordLengthInput.value !== '' && passwordLengthInput.value >= 8 && passwordLengthInput.value <= 32 ? true : false;
-}
-
-function generate(password, passwordWithNumbers, passwordWithChars, passwordLength) {
-    let part = '';
-    let char;
-    let randCode;
-
-    for (let i = 0; i < passwordLength; i++) {
-        let ranges = [
-            Math.floor(Math.random() * (47 - 33 + 1)) + 33, // Printable symbols
-            Math.floor(Math.random() * (57 - 48 + 1)) + 48, // Digits 
-            Math.floor(Math.random() * (90 - 65 + 1)) + 65, // Capital Characters
-            Math.floor(Math.random() * (122 - 97 + 1)) + 97 // Small Characters
-        ]
-
-        if (password) {
-            randCode = ranges[Math.floor(Math.random() * ranges.length)];
-            char = String.fromCharCode(randCode);
-        } else if (passwordWithNumbers) {
-            randCode = ranges[Math.floor(Math.random() * (ranges.length - 1) + 1)];
-            char = String.fromCharCode(randCode);
-        } else if (passwordWithChars) {
-            do {
-                randCode = ranges[Math.floor(Math.random() * ranges.length)];
-                char = String.fromCharCode(randCode);
-            } while (isFinite(char));
-        }
-
-        if (part === '') {
-            if (randCode >= 65 && randCode <= 90) {
-                part += char;
-            }
-            else if (randCode >= 97 && randCode <= 122) {
-                part += char;
-            } else {
-                randCode = ranges[Math.floor(Math.random() * (3 - 2 + 1) + 2)];
-                char = String.fromCharCode(randCode);
-                part += char;
-            }
-        } else {
-            part += char;
-        }
+function validateLength(length) {
+    let passwordLength;
+    if (!length) {
+        passwordInput.value = 10;
+        return passwordLength = parseInt(passwordInput.value);
     }
-    return part;
-}
-
-let exist = false;
-function createErrorMessage() {
-    let passwordDetails = document.getElementById('password-details');
-    let errorMessage = document.createElement('p');
-    let error = document.createTextNode('Invalid Password Length Or Numbers Or Characters.');
-    errorMessage.appendChild(error);
-    errorMessage.style.cssText = 'text-align: center; font-weight: bold; font-size: 20px; color: red;';
-    if (!exist) {
-        passwordDetails.after(errorMessage);
-        exist = true;
+    else {
+        passwordInput.value = parseInt(Math.max(1, Math.min(32, length)));
+        return passwordLength = parseInt(passwordInput.value);
     }
 }
 
-function storePasswordInLocalStorage(pass) {
-    let counter = localStorage.getItem('counter') || null;
-    let passwords = JSON.parse(localStorage.getItem('passwords')) || [];
-    if (counter === null) counter = 0;
-    if (!passwords[+counter]) passwords[+counter] = [+counter + 1, pass];
-    localStorage.setItem('counter', ++counter);
-    localStorage.setItem('passwords', JSON.stringify(passwords));
-}
+function generatePassword(length, includeNumbers, includeSpecialChars) {
+    let passwordLength = length;
 
-function displayLatestPasswords() {
-    let passwordsBox = document.getElementById('passwords');
-    let p = JSON.parse(localStorage.getItem('passwords')) || null;
-    passwordsBox.innerHTML = '';
+    const digits = `0123456789`;
+    const smallChars = `abcdefghijklmnopqrstuvwxyz`;
+    const capitalChars = `ABCDEFGHIJKLMNOPQRSTUVWXYZ`;
+    const specialChars = `!@#$%^&*()_-+={[}]|:;"'<,>.?/~`;
 
-    if (p !== null) {
-        for (let i = 0; i < p.length; i++) {
-            if (i >= p.length - 10) {
-                let passwordNumber = document.createElement('span');
-                let passwordNumberContent = document.createTextNode(p[i][0]);
-                passwordNumber.appendChild(passwordNumberContent);
-                let password = document.createElement('p');
-                let passwordContent = document.createTextNode(p[i][1]);
-                password.appendChild(passwordNumber);
-                password.appendChild(passwordContent);
-                passwordsBox.appendChild(password);
-            }
-        }
-    }
+    let ranges = smallChars + capitalChars;
+
+    if (includeNumbers) ranges += digits;
+    if (includeSpecialChars) ranges += specialChars;
+
+    let password = '';
+    for (let counter = 0; counter < passwordLength; counter++) password += ranges[Math.floor(Math.random() * ranges.length)];
+
+    return password;
 }
 
 function displayPassword(password) {
-    let display = document.getElementById('display-password');
-    display.innerHTML = password;
-    storePasswordInLocalStorage(password);
+    let displayDiv = document.getElementById('display-password');
+    displayDiv.innerHTML = password;
+    savePassword(password);
 }
 
-function generatePassword(passwordLength) {
-    let password = false;
-    let passwordWithNumbers = false;
-    let passwordWithChars = false;
-
-    if (checkPasswordLength() && numbersInput.checked && charactersInput.checked) {
-        password = true;
-        displayPassword(generate(password, passwordWithNumbers, passwordWithChars, passwordLength));
-        displayLatestPasswords();
-    } else if (checkPasswordLength() && numbersInput.checked && charactersInput.checked === false) {
-        passwordWithNumbers = true;
-        displayPassword(generate(password, passwordWithNumbers, passwordWithChars, passwordLength));
-        displayLatestPasswords();
-    } else if (checkPasswordLength() && numbersInput.checked === false && charactersInput.checked) {
-        passwordWithChars = true;
-        displayPassword(generate(password, passwordWithNumbers, passwordWithChars, passwordLength));
-        displayLatestPasswords();
-    } else {
-        createErrorMessage();
-    }
+function savePassword(password) {
+    let passwordsList = JSON.parse(localStorage.getItem('passwordsList')) || [];
+    passwordsList.unshift(password);
+    if (passwordsList.length > 10) passwordsList.pop();
+    localStorage.setItem("passwordsList", JSON.stringify(passwordsList));
 }
 
-window.onload = displayLatestPasswords();
-generatePasswordButton.onclick = () => {
-    generatePassword(passwordLengthInput.value);
+function showLatestPassowrds() {
+    let passwordsDiv = document.getElementById('passwords');
+    let passwordsList = JSON.parse(localStorage.getItem('passwordsList')) || [];
+    let latest = passwordsList.map((value, index) => `<p><span>${index + 1}</span> ${escapeHTML(value)}</p>`).join('');
+    passwordsDiv.innerHTML = latest;
 }
+
+function escapeHTML(value) {
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+passwordInput.onblur = () => validateLength(passwordInput.value);
+generateButton.onclick = () => {
+    let length = validateLength(passwordInput.value);
+    let password = generatePassword(length, includeNumbersCheckBox.checked, includeSpecialCharsCheckBox.checked);
+    displayPassword(password);
+    showLatestPassowrds();
+}
+document.addEventListener('DOMContentLoaded', showLatestPassowrds);
